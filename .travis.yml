@@ -1,4 +1,4 @@
-language: csharp
+language: fsharp
 
 mono: none
 dotnet: 3.1.101
