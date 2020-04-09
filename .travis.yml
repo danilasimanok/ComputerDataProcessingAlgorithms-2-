@@ -7,8 +7,8 @@ before_install:
     - sudo apt-get install nuget
 
 install:
-    - nuget restore hw1/Tasks/tasks.sln
+    - nuget restore hw1/tasks/tasks.sln
 
 script:
-    - dotnet build hw1/Tasks/tasks.sln
-    - dotnet test hw1/Tasks/tasks.sln
+    - dotnet build hw1/tasks/tasks.sln
+    - dotnet test hw1/tasks/tasks.sln
