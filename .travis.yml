@@ -1,4 +1,4 @@
-language: fsharp
+language: сsharp
 
 mono: none
 dotnet: 3.1.101
@@ -7,8 +7,8 @@ before_install:
     - sudo apt-get install nuget
 
 install:
-    - nuget restore hw1/Tasks/Tasks.sln
+    - nuget restore hw1/Tasks/tasks.sln
 
 script:
-    - dotnet build hw1/Tasks/Tasks.sln
-    - dotnet test hw1/Tasks/Tasks.sln
+    - dotnet build hw1/Tasks/tasks.sln
+    - dotnet test hw1/Tasks/tasks.sln
