@@ -45,9 +45,9 @@ let testReverseExtremeCase () =
 
 [<Test>]
 let testPowersCommonCases () =
-    powers_of_2 0 0 |> should equal <| Some [1]
-    powers_of_2 4 0 |> should equal <| Some [16]
-    powers_of_2 1 5 |> should equal <| Some [2; 4; 8; 16; 32; 64]
+    powersOf2 0 0 |> should equal <| Some [1]
+    powersOf2 4 0 |> should equal <| Some [16]
+    powersOf2 1 5 |> should equal <| Some [2; 4; 8; 16; 32; 64]
 
 [<TestCase(-1, 0)>]
 [<TestCase(0, -1)>]
