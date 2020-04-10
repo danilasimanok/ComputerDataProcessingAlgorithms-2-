@@ -11,15 +11,14 @@ module Tasks =
         then Some(inner n 1 1)
         else None
 
-    let fib n =
+    let fibonacci n =
         let rec inner n0 n1 i n =
             if n = i
             then n1
             else inner n1 (n0 + n1) (i + 1) n
         if n = 0
-        then Some(0)
-        else 
-            if n < 0
+            then Some(0)
+        elif n < 0
             then None
             else Some(inner 0 1 1 n)
 
@@ -30,11 +29,11 @@ module Tasks =
                 | hd :: tl -> inner tl (hd :: acc)
         inner list []
 
-    let powers_of_2 n m =
+    let powersOf2 n m =
         let rec inner n sum acc i current =
             if i = sum
             then current :: acc
-            else inner n sum (if i >=n then (current :: acc) else acc) (i + 1) (2 * current)
+            else inner n sum (if i >= n then (current :: acc) else acc) (i + 1) (2 * current)
         if n < 0 || m < 0
         then None
         else Some(reverse (inner n (n + m) [] 0 1))

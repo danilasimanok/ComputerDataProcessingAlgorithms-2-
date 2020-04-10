@@ -18,22 +18,22 @@ let ``factorial is not defined for negative integers``() =
 
 [<Test>]
 let queryFirstAndSecondNumbers () =
-    (fib 0, fib 1) |> should equal (Some 0, Some 1)
+    (fibonacci 0, fibonacci 1) |> should equal (Some 0, Some 1)
 
 [<TestCase(2)>]
 [<TestCase(10)>]
 [<TestCase(23)>]
 let testSecondPartOfFibonachiDefinition (n) =
     let fibn, fibn1, fibn2 =
-        match fib n, fib (n-1), fib (n-2) with
+        match fibonacci n, fibonacci (n - 1), fibonacci (n - 2) with
         | Some a, Some b, Some c -> a, b, c
         | _, _, _ -> -1, -1, -1
     fibn |> should equal <| fibn1 + fibn2
 
 [<Test>]
 let ``fibonachi numbers could have only positive index`` () =
-    fib -1 |> should equal None
-    fib -9 |> should equal None
+    fibonacci -1 |> should equal None
+    fibonacci -9 |> should equal None
 
 [<Test>]
 let testReverseCommonCase () =
@@ -53,7 +53,7 @@ let testPowersCommonCases () =
 [<TestCase(0, -1)>]
 [<TestCase(-1, -1)>]
 let testPowersWithInvalidArgs (n, m) =
-    powers_of_2 n m |> should equal None
+    powersOf2 n m |> should equal None
 
 [<TestCase(1)>]
 [<TestCase(2)>]
