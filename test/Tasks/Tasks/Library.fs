@@ -1,5 +1,7 @@
 ﻿namespace Tasks
 
+open System.Threading
+
 module Tasks =
     
     let min list =
@@ -33,19 +35,39 @@ module Tasks =
         then ()
         else printRecursive printBorderOuter printInteriorOuter n
 
-    type Stack () =
-        
-        let mutable list = []
+    type Queue<'a> =
+        Queue of 'a list * 'a list
 
-        let pop () =
-            match list with
-            | [] -> None
-            | hd :: tl ->
-                list <- tl
-                Some hd
+    type BlockingQueue<'a> () =
         
-        member this.Push x =
-            lock this (fun () -> list <- x :: list)
+        let mutable queue : Queue<'a> = Queue ([], [])
 
-        member this.TryPop () =
-            lock this pop
+        let enqueue element =
+            match queue with
+            | Queue (l1, l2) -> queue <- Queue (element :: l1, l2)
+
+        let dequeue () =
+            let inner () =
+                match queue with
+                | Queue ([], []) -> None
+                | Queue (l1, []) ->
+                    let hd :: tl = l1
+                    queue <- Queue ([], List.rev tl)
+                    Some hd
+                | Queue (l1, l2) ->
+                    let hd :: tl = l2
+                    queue <- Queue (l1, tl)
+                    Some hd
+            lock queue inner
+
+        member _.Enqueue element =
+            lock queue (fun() -> enqueue element)
+
+        member _.Dequeue () =
+            let rec inner () =
+                match dequeue () with
+                | None ->
+                    Thread.Sleep 0
+                    inner ()
+                | Some element -> element
+            inner ()

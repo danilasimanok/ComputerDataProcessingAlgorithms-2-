@@ -5,6 +5,7 @@ open Tasks.Tasks
 open System.IO
 open System
 open FsUnit
+open System.Threading
 
 [<Test>]
 let testMinCommonCases () = 
@@ -30,19 +31,15 @@ let testPrintSquareExtreneCase (n) =
     printSquare n
     sw.ToString() |> should equal ""
 
-(*[<Test>]
-let testStack () =
-    
-    let stack = new Stack()
-    let list1 = [1 .. 10]
-    let list2 = [11 .. 20]
-
-    let rec push list =
-        match list with
-        | [] -> ()
-        | hd :: tl ->
-            stack.Push hd
-            push tl
-    
-    let t1 = System.Threading.Thread (fun () -> push list)
-    *)
+[<Test>]
+let testBlockingQueue () =
+    let bq = new BlockingQueue<int>()
+    let destination () =
+        bq.Dequeue() |> ignore
+    let t1 = new Thread(destination)
+    t1.Start()
+    Thread.Sleep 1000
+    t1.IsAlive |> should equal true
+    bq.Enqueue 10
+    Thread.Sleep 1000
+    t1.IsAlive |> should equal false
