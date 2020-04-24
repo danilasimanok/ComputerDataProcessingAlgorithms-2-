@@ -21,7 +21,7 @@ let testPrintSquareCommonCase () =
     use sw = new StringWriter()
     Console.SetOut(sw)
     printSquare 4
-    sw.ToString() |> should equal "****\r\n*  *\r\n*  *\r\n****\r\n"
+    sw.ToString() |> should equal "****\n*  *\n*  *\n****\n"
 
 [<TestCase(0)>]
 [<TestCase(-1)>]

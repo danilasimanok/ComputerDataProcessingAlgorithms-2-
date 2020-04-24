@@ -26,10 +26,10 @@ module Tasks =
         let printInteriorInner () = printf " "
         let printBorderOuter () =
             printRecursive printBorderInner printBorderInner n
-            printfn ""
+            printf "\n"
         let printInteriorOuter () =
             printRecursive printBorderInner printInteriorInner n
-            printfn ""
+            printf "\n"
 
         if n <= 0
         then ()
