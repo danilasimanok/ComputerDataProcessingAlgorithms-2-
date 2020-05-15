@@ -35,39 +35,23 @@ module Tasks =
         then ()
         else printRecursive printBorderOuter printInteriorOuter n
 
-    type Queue<'a> =
-        Queue of 'a list * 'a list
-
-    type BlockingQueue<'a> () =
+    type PriorityQueue<'a> () =
         
-        let mutable queue : Queue<'a> = Queue ([], [])
+        let mutable queue : (int * 'a) list = []
 
-        let enqueue element =
-            match queue with
-            | Queue (l1, l2) -> queue <- Queue (element :: l1, l2)
-
-        let dequeue () =
-            let inner () =
+        member _.Enqueue priority element =
+            let rec inner queue acc =
                 match queue with
-                | Queue ([], []) -> None
-                | Queue (l1, []) ->
-                    let hd :: tl = l1
-                    queue <- Queue ([], List.rev tl)
-                    Some hd
-                | Queue (l1, l2) ->
-                    let hd :: tl = l2
-                    queue <- Queue (l1, tl)
-                    Some hd
-            lock queue inner
-
-        member _.Enqueue element =
-            lock queue (fun() -> enqueue element)
+                | [] -> List.rev ((priority, element) :: acc)
+                | (hdPriority, hdElement) :: tl ->
+                    if priority > hdPriority
+                    then List.rev ((priority, element) :: acc) @ queue
+                    else inner tl ((hdPriority, hdElement) :: acc)
+            queue <- inner queue []
 
         member _.Dequeue () =
-            let rec inner () =
-                match dequeue () with
-                | None ->
-                    Thread.Sleep 0
-                    inner ()
-                | Some element -> element
-            inner ()
+            match queue with
+            | [] -> failwith "Queue is empty!"
+            | (_, hdElement) :: tl ->
+                queue <- tl
+                hdElement

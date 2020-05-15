@@ -5,7 +5,6 @@ open Tasks.Tasks
 open System.IO
 open System
 open FsUnit
-open System.Threading
 
 [<Test>]
 let testMinCommonCases () = 
@@ -32,14 +31,18 @@ let testPrintSquareExtreneCase (n) =
     sw.ToString() |> should equal ""
 
 [<Test>]
-let testBlockingQueue () =
-    let bq = new BlockingQueue<int>()
-    let destination () =
-        bq.Dequeue() |> ignore
-    let t1 = new Thread(destination)
-    t1.Start()
-    Thread.Sleep 1000
-    t1.IsAlive |> should equal true
-    bq.Enqueue 10
-    Thread.Sleep 1000
-    t1.IsAlive |> should equal false
+let testPriorityQueueCommonCase () =
+    let pq = new PriorityQueue<string> ()
+    pq.Enqueue 2 "the"
+    pq.Enqueue 4 "remained"
+    pq.Enqueue 6 "The"
+    pq.Enqueue 5 "future"
+    pq.Enqueue 1 "past."
+    pq.Enqueue 3 "in"
+    let message = (Seq.ofList << List.init 6) (fun x -> pq.Dequeue ())
+    String.concat " " message |> should equal "The future remained in the past."
+
+[<Test>]
+let testPriorityQueueExtremeCase () =
+    let pq = new PriorityQueue<string> ()
+    ignore << pq.Dequeue |> should (throwWithMessage "Queue is empty!") typeof<exn>
